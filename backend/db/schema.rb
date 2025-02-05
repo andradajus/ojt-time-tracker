@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_02_05_224629) do
+ActiveRecord::Schema[7.1].define(version: 2025_02_05_231502) do
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -19,6 +19,15 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_05_224629) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "user_type"
+    t.boolean "is_active", default: true
+    t.boolean "is_deleted", default: false
+    t.string "first_name"
+    t.string "middle_name"
+    t.string "last_name"
+    t.integer "year_level"
+    t.string "course"
+    t.boolean "is_onboarded", default: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

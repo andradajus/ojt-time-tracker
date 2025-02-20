@@ -14,7 +14,7 @@ Devise.setup do |config|
   # confirmation, reset password and unlock tokens in the database.
   # Devise will use the `secret_key_base` as its `secret_key`
   # by default. You can change it below and use your own secret key.
-  # config.secret_key = '696d2a2d846e363110602fe3d8090ffc7ef2f5118a749e01927a6e86d0cd300183140abfd88884e84dc5001a667f84ff30c65130bbba4fbbf3e8ed905705e673'
+  # config.secret_key = '43434d025bf06f193f6cc6d0859d467abedb17fbedf7aeb39b782f015e6d24f76c9a28a6d3d68033376f7cfb183b491965606849b30deb7b7c8c7ca591a4005d'
 
   # ==> Controller configuration
   # Configure the parent class to the devise controllers.
@@ -24,7 +24,7 @@ Devise.setup do |config|
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class
   # with default "from" parameter.
-  config.mailer_sender = 'please-change-me-at-config-initializers-devise@example.com'
+  config.mailer_sender = ''
 
   # Configure the class responsible to send e-mails.
   # config.mailer = 'Devise::Mailer'
@@ -126,7 +126,7 @@ Devise.setup do |config|
   config.stretches = Rails.env.test? ? 1 : 12
 
   # Set up a pepper to generate the hashed password.
-  # config.pepper = 'fad9ebe811bca36ea8e9c7deebe081d289c1fedc09cd57cff6e59aa6d5254af736161c36f6f1a78d1757af6b06d63739e0d17f8772517cc2e3735f69f6845af0'
+  # config.pepper = 'c1a141765670a3546f55357ee13be8ec86ef22a1f331e9610f31a69d2fb531019a90679a90096dcd99fe0086e8dfe14c16f373b71a02481ec1229a285042aa51'
 
   # Send a notification to the original email when the user's email is changed.
   # config.send_email_changed_notification = false
@@ -305,21 +305,21 @@ Devise.setup do |config|
   config.responder.error_status = :unprocessable_entity
   config.responder.redirect_status = :see_other
 
+  config.jwt do |jwt|
+    jwt.secret = Rails.application.credentials.fetch(:secret_key_base)
+    jwt.dispatch_requests = [
+      ['POST', %r{^/api/v1/users/sign_in$}]
+    ]
+    jwt.revocation_requests = [
+      ['DELETE', %r{^/api/v1/users/sign_out$}]
+    ]
+    jwt.expiration_time = 360.minutes.to_i
+
+  end
+
   # ==> Configuration for :registerable
 
   # When set to false, does not sign a user in automatically after their password is
   # changed. Defaults to true, so a user is signed in automatically after changing a password.
   # config.sign_in_after_change_password = true
-
-  config.skip_session_storage = [:http_auth, :params_auth]
-  config.jwt do |jwt|
-    jwt.secret = Rails.application.credentials.devise_jwt_secret_key
-    jwt.dispatch_requests = [
-      ['POST', %r{^/login$}]
-    ]
-    jwt.revocation_requests = [
-      ['DELETE', %r{^/logout$}]
-    ]
-    jwt.expiration_time = 1.day.to_i
-  end
 end

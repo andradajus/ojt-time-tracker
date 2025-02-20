@@ -1,63 +1,93 @@
-import { useState } from "react"
+import { useState } from "react";
 import { MdErrorOutline } from "react-icons/md";
+import { API } from "./api/api";
+import Cookies from 'js-cookie';
 
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
-  })
+  });
   const [errors, setErrors] = useState({
     email: null,
-    password: null
-  })
+    password: null,
+    general: null
+  });
 
   const handleChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value
-    })
+    });
     setErrors({
       ...errors,
-      [name]: null
-    })
-  }
+      [name]: null,
+      general: null
+    });
+  };
 
   const validateForm = () => {
-    let emailError = null
-    let passwordError = null
+    let emailError = null;
+    let passwordError = null;
 
     if (!formData.email) {
-      emailError = 'Email is required'
+      emailError = 'Email is required';
     }
 
     if (!formData.password) {
-      passwordError = 'Password is required'
+      passwordError = 'Password is required';
     }
 
     setErrors({
       email: emailError,
-      password: passwordError
-    })
+      password: passwordError,
+      general: null
+    });
 
     if (emailError || passwordError) {
-      return false
+      return false;
     }
 
-    return true
-  }
+    return true;
+  };
 
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
     if (!validateForm()) {
-      return
+      return;
     } else {
-      console.log('Form is valid')
+      handleLogin();
     }
-  }
+  };
 
+  const handleLogin = async () => {
+    try {
+      const response = await API.login({ user: formData });
+      let token = response.headers['authorization'];
+      if (token) {
+        if (token.startsWith('Bearer ')) {
+          token = token.slice(7);
+        }
+        Cookies.set('Authorization', token);
+      }
+      console.log(response);
+    } catch (error) {
+      if (error && error.errors) {
+        setErrors({
+          ...errors,
+          general: error.errors.join(', ')
+        });
+      } else {
+        setErrors({
+          ...errors,
+          general: 'An unexpected error occurred. Please try again.'
+        });
+      }
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -77,14 +107,14 @@ const Login = () => {
                 className="border p-2 min-w-md bg-white rounded-sm"
                 onChange={handleChange}
               />
-              {errors.email && ( 
+              {errors.email && (
                 <div className="flex gap-2 items-center text-red-500">
                   <MdErrorOutline />
                   <span>{errors.email}</span>
                 </div>
               )}
             </div>
-            
+
             <div className="flex flex-col">
               <input
                 value={formData.password}
@@ -102,16 +132,23 @@ const Login = () => {
               )}
             </div>
 
-            <button 
+            {errors.general && (
+              <div className="flex gap-2 items-center text-red-500">
+                <MdErrorOutline />
+                <span>{errors.general}</span>
+              </div>
+            )}
+
+            <button
               className="font-semibold text-lg bg-red-500 p-2 mt-2 cursor-pointer hover:bg-red-700 ease-in-out transition rounded-md hover:underline"
             >
               LOGIN
             </button>
-          </form> 
+          </form>
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

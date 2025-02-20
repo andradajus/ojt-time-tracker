@@ -16,7 +16,7 @@ const api = async (endpoint, method, body, params, customHeaders = {}) => {
   });
 
   const headers = {
-    Authorization: `Bearer ${token}`,
+    ...(endpoint !== AuthenticationAPI.login && { Authorization: `Bearer ${token}` }),
     ...(isFormData
       ? { 'Content-Type': 'multipart/form-data' }
       : { 'Content-Type': 'application/json' }),
@@ -41,6 +41,6 @@ const api = async (endpoint, method, body, params, customHeaders = {}) => {
 
 export const API = {
   // AUTHENTICATION API //
-  login: (body) => api(AuthenticationAPI.login, 'post', body),
+  login: (body) => api(AuthenticationAPI.login, 'POST', body),
   // END AUTHENTICATION API //
 };

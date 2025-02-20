@@ -1,58 +1,50 @@
+# frozen_string_literal: true
+
 class Users::SessionsController < Devise::SessionsController
-  respond_to :json
-  skip_before_action :verify_signed_out_user, only: :destroy
-  skip_before_action :require_no_authentication, only: [:create]
+  # before_action :configure_sign_in_params, only: [:create]
 
-  private
+  # GET /resource/sign_in
+  # def new
+  #   super
+  # end
 
-  def respond_with(resource, _opts = {})
-    render json: { message: 'Logged in successfully.', user: resource }, status: :ok
+  # POST /resource/sign_in
+  def create
+    self.resource = warden.authenticate!(auth_options)
+    if resource.persisted?
+      sign_in(resource_name, resource)
+      render json: { status: :ok, message: 'Login successful', role: resource.role }
+    else
+      render json: { status: 'error', message: 'Login Failed', errors: ['Invalid email or password'] }, status: :unprocessable_entity
+    end
   end
 
-  def respond_to_on_destroy
-    log_out_success && return if current_user
+  # DELETE /resource/sign_out
+  # def destroy
+  #   super do |resource|
+  #     render json: { status: :ok, message: 'Logout successful' }
+  #   end
+  # end
 
-    log_out_failure
-  end
+  # DELETE /resource/sign_out
+  # def destroy
+  #   super
+  # end
 
-  def log_out_success
-    render json: { message: "Logged out successfully." }, status: :ok
-  end
+  # protected
 
-  def log_out_failure
-    render json: { message: "Something went wrong." }, status: :unauthorized
-  end
+  # If you have extra params to permit, append them to the sanitizer.
+  # def configure_sign_in_params
+  #   devise_parameter_sanitizer.permit(:sign_in, keys: [:attribute])
+  # end
 
   protected
 
-  def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_in, keys: [:email, :password])
-  end
-
-  # Override the method to avoid using flash
-  def set_flash_message!(*args)
-    # Do nothing
-  end
-
-  def set_flash_message(*args)
-    # Do nothing
-  end
-
-  # Override the method to avoid using resource_name
-  def resource_name
-    :user
-  end
-
-  def resource_class
-    User
-  end
-
-  # Override the method to avoid using resource=
-  def resource=(resource)
-    @resource = resource
-  end
-
-  def resource
-    @resource
+  def respond_with(resource, _opts = {})
+    if resource.persisted?
+      render json: { status: :ok, message: 'Login successful'}
+    else
+      render json: { status: 'error', message: 'Login Failed', errors: ['Invalid email or password'] }, status: :unprocessable_entity
+    end
   end
 end

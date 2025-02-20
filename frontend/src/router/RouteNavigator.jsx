@@ -1,6 +1,5 @@
-// import { useContext } from 'react';
-// import { UserContext } from '../context/UserContext';
-import UserDashboardLayout from '../layout/UserDashboardLayout';
+
+import AdminDashboardLayout from "../layout/AdminDashboardLayout";
 
 const RouteNavigator = () => {
 //   const { user, loading } = useContext(UserContext);
@@ -11,9 +10,9 @@ const RouteNavigator = () => {
 
   return (
     <>
-      <UserDashboardLayout />
+      {/* <UserDashboardLayout /> */}
 
-      {/* <AdminDashboardLayout /> */}
+      <AdminDashboardLayout />
     </>
   );
 };

@@ -1,34 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
-import { MdDashboard } from "react-icons/md";
-import { TbCurrencyPeso } from "react-icons/tb";
-import { BsListTask } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 
-const UserNavbar = () => {
+const AdminNavbar = () => {
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
-
-  const NavbarConstants = [
-    {
-      id: 1,
-      icon: MdDashboard,
-      name: 'Dashboard',
-      link: '/dashboard'
-    },
-    {
-      id: 2,
-      icon: TbCurrencyPeso,
-      name: 'Payments',
-      link: '/dashboard/payments'
-    },
-    {
-      id: 3,
-      icon: BsListTask,
-      name: 'Tasks',
-      link: '/dashboard/tasks'
-    },
-  ];
 
   const handleLogout = () => {
     document.cookie = 'Authorization=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
@@ -52,18 +28,6 @@ const UserNavbar = () => {
   return (
     <div className="bg-gray-200 flex w-full justify-between p-5 border-t-4 border-red-500 shadow-b-xl">
       <span className="font-bold text-lg">Justin&lsquo;s Team Tracker</span>
-      <div className="flex gap-10">
-        {NavbarConstants.map((item) => (
-          <span 
-            key={item.id} 
-            className="flex gap-1 items-center hover:underline cursor-pointer"
-            onClick={() => navigate(item.link)}
-          >
-            <item.icon />
-            <span>{item.name}</span>
-          </span>
-        ))}
-      </div>
       <div className="relative" ref={dropdownRef}>
         <div 
           className="flex gap-1 font-semibold cursor-pointer hover:underline"
@@ -87,4 +51,4 @@ const UserNavbar = () => {
   );
 };
 
-export default UserNavbar;
+export default AdminNavbar;

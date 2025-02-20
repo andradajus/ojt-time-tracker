@@ -1,4 +1,5 @@
 import UserHeroSection from "../components/UserHeroSection";
+import AdminUserList from "../pages/AdminUserList";
 import UserPayments from "../pages/UserPayments";
 import UserTasks from "../pages/UserTasks";
 
@@ -29,4 +30,11 @@ export const USER_DASHBOARD_ROUTES = [
     path: 'tasks',
     element: <UserTasks />,
   }
+]
+
+export const ADMIN_DASHBOARD_ROUTES = [
+  {
+    path: '/*',
+    element: <AdminUserList />,
+  },
 ]

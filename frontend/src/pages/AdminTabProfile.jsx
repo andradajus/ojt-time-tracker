@@ -1,4 +1,7 @@
-const UserHeroSection = () => {
+import propTypes from 'prop-types';
+
+const AdminTabProfile = ({ user }) => {
+  console.log("user", user);
   return (
     <div className="p-5">
       <h1 className="text-2xl font-bold mb-5">User Information</h1>
@@ -46,7 +49,11 @@ const UserHeroSection = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default UserHeroSection
+AdminTabProfile.propTypes = {
+  user: propTypes.object.isRequired,
+};
+
+export default AdminTabProfile;

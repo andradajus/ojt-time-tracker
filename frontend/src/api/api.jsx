@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { AuthenticationAPI, UsersAPI } from '../constants/endpoints';
+import { AuthenticationAPI, UsersAPI, PaymentsAPI } from '../constants/endpoints';
 
 const baseURL = import.meta.env.VITE_BACKEND_API_URL;
 
@@ -53,5 +53,12 @@ export const API = {
   createUser: (body) => api(UsersAPI.currentUser, 'POST', body),
   updateUser: (body) => api(UsersAPI.currentUser, 'PATCH', body),
   // END ADMIN USER API //
+
+  // PAYMENTS API //
+  createPayment: (body) => api(PaymentsAPI.payments, 'POST', body),
+  getPayments: (id) => api(PaymentsAPI.userPayments, 'GET', null, { id }),
+  updatePayment: (id, body) => api(PaymentsAPI.paymentById, 'PUT', body, { id }),
+  getPaymentsByCurrentUser: () => api(PaymentsAPI.paymentByCurrentUser, 'GET'),
+  // END PAYMENTS API //
   
 };

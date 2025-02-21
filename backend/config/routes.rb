@@ -10,6 +10,11 @@ Rails.application.routes.draw do
     get 'user', to: 'users#show'
     post 'user', to: 'users#create'
     patch 'user', to: 'users#update'
+
+    resources :payment_schedules, only: [:create, :index, :update] do
+      get 'user/:user_id', to: 'payment_schedules#show', on: :collection
+      get 'list', to: 'payment_schedules#list', on: :collection
+    end
     # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
     # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

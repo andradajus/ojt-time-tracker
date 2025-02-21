@@ -1,40 +1,22 @@
+import { useState, useEffect } from 'react';
 import { MdOutlineRemoveRedEye } from "react-icons/md";
+import { API } from '../api/api';
 
 const UserPayments = () => {
-  const payments = [
-    {
-      date: '2025-02-15',
-      amount: '',
-      bankName: '',
-      accountNumber: '',
-      status: 'Pending',
-      datePaid: '-',
-    },
-    {
-      date: '2025-02-28',
-      amount: '',
-      bankName: '',
-      accountNumber: '',
-      status: 'Pending',
-      datePaid: '-',
-    },
-    {
-      date: '2025-02-19',
-      amount: 100,
-      bankName: 'Bank of America',
-      accountNumber: '123456789',
-      status: 'Completed',
-      datePaid: '2025-02-20',
-    },
-    {
-      date: '2025-02-18',
-      amount: 200,
-      bankName: 'Chase Bank',
-      accountNumber: '987654321',
-      status: 'Pending',
-      datePaid: '-',
-    },
-  ];
+  const [payments, setPayments] = useState([]);
+
+  const fetchPayments = async () => {
+    try {
+      const response = await API.getPaymentsByCurrentUser();
+      setPayments(response.data.payment_schedules);
+    } catch (error) {
+      console.error('Failed to fetch payments:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchPayments();
+  }, []);
 
   return (
     <div className="p-5">
@@ -52,14 +34,14 @@ const UserPayments = () => {
           </tr>
         </thead>
         <tbody>
-          {payments.map((payment, index) => (
+          {payments?.map((payment, index) => (
             <tr key={index}>
               <td className="py-2 px-4 border-b">{payment.date}</td>
               <td className="py-2 px-4 border-b">{payment.amount || '-'}</td>
-              <td className="py-2 px-4 border-b">{payment.bankName || '-'}</td>
-              <td className="py-2 px-4 border-b">{payment.accountNumber || '-'}</td>
+              <td className="py-2 px-4 border-b">{payment.bank_name || '-'}</td>
+              <td className="py-2 px-4 border-b">{payment.account_number || '-'}</td>
               <td className="py-2 px-4 border-b">{payment.status}</td>
-              <td className="py-2 px-4 border-b">{payment.datePaid}</td>
+              <td className="py-2 px-4 border-b">{payment.date_paid}</td>
               <td className="py-2 px-4 border-b">
                 {payment.status !== 'Pending' && (
                   <button className="text-blue-500 hover:underline cursor-pointer duration-300">

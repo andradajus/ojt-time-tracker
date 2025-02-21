@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_02_21_031558) do
+ActiveRecord::Schema[7.1].define(version: 2025_02_21_072959) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -34,6 +34,19 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_21_031558) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_payment_profiles_on_user_id"
+  end
+
+  create_table "payment_schedules", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.date "date"
+    t.decimal "amount", precision: 10, scale: 2
+    t.string "bank_name"
+    t.string "account_number"
+    t.string "status"
+    t.date "date_paid"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_payment_schedules_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -66,4 +79,5 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_21_031558) do
   end
 
   add_foreign_key "payment_profiles", "users"
+  add_foreign_key "payment_schedules", "users"
 end

@@ -7,8 +7,9 @@ class User < ApplicationRecord
          :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
 
   has_one :payment_profile
+  has_many :payment_schedules, dependent: :destroy
 
   def as_json(options = {})
-    super(options.merge(include: :payment_profile, except: [:id, :jti]))
+    super(options.merge(include: :payment_profile, except: [:jti]))
   end
 end

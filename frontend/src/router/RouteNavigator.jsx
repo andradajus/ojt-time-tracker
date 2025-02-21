@@ -1,18 +1,30 @@
 
+import { useContext } from "react";
 import AdminDashboardLayout from "../layout/AdminDashboardLayout";
+import { UserContext } from "../context/UserContext";
+import UserDashboardLayout from "../layout/UserDashboardLayout";
+import UserOnboarding from "../pages/UserOnboarding";
 
 const RouteNavigator = () => {
-//   const { user, loading } = useContext(UserContext);
+  const { user, loading } = useContext(UserContext);
 
-//   if (loading) {
-//     return <MainLoading />;
-//   }
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen w-screen">
+        <h1>Loading...</h1>
+      </div>
+    )
+  }
 
   return (
     <>
-      {/* <UserDashboardLayout /> */}
-
-      <AdminDashboardLayout />
+      {user && user.user_type === 'admin' ? (
+        <AdminDashboardLayout />
+      ) : user && !user.is_onboarded ? (
+        <UserOnboarding />
+      ) : (
+        <UserDashboardLayout />
+      )}
     </>
   );
 };

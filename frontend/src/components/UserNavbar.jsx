@@ -1,11 +1,13 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 import { MdDashboard } from "react-icons/md";
 import { TbCurrencyPeso } from "react-icons/tb";
 import { BsListTask } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 
 const UserNavbar = () => {
   const navigate = useNavigate();
+  const { user } = useContext(UserContext);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -20,7 +22,8 @@ const UserNavbar = () => {
       id: 2,
       icon: TbCurrencyPeso,
       name: 'Payments',
-      link: '/dashboard/payments'
+      link: '/dashboard/payments',
+      show: user.is_paid
     },
     {
       id: 3,
@@ -53,7 +56,7 @@ const UserNavbar = () => {
     <div className="bg-gray-200 flex w-full justify-between p-5 border-t-4 border-red-500 shadow-b-xl">
       <span className="font-bold text-lg">Justin&lsquo;s Team Tracker</span>
       <div className="flex gap-10">
-        {NavbarConstants.map((item) => (
+        {NavbarConstants.filter(item => item.show !== false).map((item) => (
           <span 
             key={item.id} 
             className="flex gap-1 items-center hover:underline cursor-pointer"

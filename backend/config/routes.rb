@@ -5,7 +5,11 @@ Rails.application.routes.draw do
       sessions: 'users/sessions'
     }
 
+    resources :users, only: [:index]
+
     get 'user', to: 'users#show'
+    post 'user', to: 'users#create'
+    patch 'user', to: 'users#update'
     # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
     # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

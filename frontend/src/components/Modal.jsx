@@ -6,7 +6,11 @@ const Modal = ({ isOpen, onClose, onSubmit }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const email = event.target.email.value;
-    onSubmit(email);
+    const is_paid = event.target.is_paid.checked;
+    onSubmit({ user: {
+      email: email,
+      is_paid: is_paid
+    }});
   };
 
   return (
@@ -14,13 +18,23 @@ const Modal = ({ isOpen, onClose, onSubmit }) => {
       <div className="bg-white p-5 rounded shadow-lg">
         <h2 className="text-2xl font-bold mb-5">Add New User</h2>
         <form onSubmit={handleSubmit}>
-          <div className="mb-5">
+          <div className="mb-2">
             <label className="block mb-2">Email Address</label>
             <input
               type="email"
               name="email"
               required
               className="px-4 py-2 border rounded w-full"
+            />
+          </div>
+
+          <div className="flex gap-1 mb-2">
+            <label htmlFor="is_paid" className="">Paid</label>
+            <input
+              id="is_paid"
+              type="checkbox"
+              name="is_paid"
+              className="border rounded"
             />
           </div>
           <div className="flex justify-end gap-2">

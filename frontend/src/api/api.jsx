@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { AuthenticationAPI } from '../constants/endpoints';
+import { AuthenticationAPI, UsersAPI } from '../constants/endpoints';
 
 const baseURL = import.meta.env.VITE_BACKEND_API_URL;
 
@@ -43,4 +43,15 @@ export const API = {
   // AUTHENTICATION API //
   login: (body) => api(AuthenticationAPI.login, 'POST', body),
   // END AUTHENTICATION API //
+
+  // USERS API //
+  getCurrentUserDetails: () => api(UsersAPI.currentUser, 'GET'),
+  // END USERS API //
+
+  // ADMIN USER API //
+  getUsers: (params) => api(UsersAPI.users, 'GET', null, params),
+  createUser: (body) => api(UsersAPI.currentUser, 'POST', body),
+  updateUser: (body) => api(UsersAPI.currentUser, 'PATCH', body),
+  // END ADMIN USER API //
+  
 };

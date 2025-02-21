@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MdErrorOutline } from "react-icons/md";
 import { API } from "./api/api";
 import Cookies from 'js-cookie';
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -73,6 +75,7 @@ const Login = () => {
         Cookies.set('Authorization', token);
       }
       console.log(response);
+      navigate('/dashboard');
     } catch (error) {
       if (error && error.errors) {
         setErrors({
@@ -88,6 +91,13 @@ const Login = () => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    const token = Cookies.get('Authorization');
+    if (token) {
+      navigate('/dashboard');
+    }
+  }, [navigate]);
 
   return (
     <>

@@ -1,8 +1,11 @@
+import { UserProvider } from '../context/UserContext';
 import RouteNavigator from './RouteNavigator';
 
 const RouterLayout = () => {
   return (
-    <RouteNavigator />
+    <UserProvider>
+      <RouteNavigator />
+    </UserProvider>
   );
 };
 

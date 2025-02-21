@@ -10,9 +10,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_02_20_171702) do
+ActiveRecord::Schema[7.1].define(version: 2025_02_21_031558) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "jwt_denylists", force: :cascade do |t|
+    t.string "jti", null: false
+    t.datetime "exp", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["jti"], name: "index_jwt_denylists_on_jti"
+  end
+
+  create_table "payment_profiles", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "mode_of_payment"
+    t.string "bank_or_wallet_name"
+    t.string "account_name"
+    t.string "account_number"
+    t.decimal "first_monthly_payment", precision: 10, scale: 2
+    t.decimal "second_monthly_payment", precision: 10, scale: 2
+    t.decimal "monthly_payment", precision: 10, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_payment_profiles_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -37,9 +59,11 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_20_171702) do
     t.string "emergency_contact_number"
     t.string "role"
     t.string "jti"
+    t.boolean "is_paid", default: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["jti"], name: "index_users_on_jti", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "payment_profiles", "users"
 end
